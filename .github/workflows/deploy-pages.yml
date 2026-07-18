@@ -31,6 +31,19 @@ jobs:
           mkdir -p _site/portfolio_assets
           cat .deploy/index.part.* | tr -d '\n\r' | base64 --decode > _site/index.html
           cp portfolio_assets/*.webp _site/portfolio_assets/
+          cp animations.css animations.js _site/
+          python - <<'PY'
+          from pathlib import Path
+          page = Path('_site/index.html')
+          html = page.read_text(encoding='utf-8')
+          stylesheet = '<link rel="stylesheet" href="animations.css">'
+          script = '<script src="animations.js" defer></script>'
+          if stylesheet not in html:
+              html = html.replace('</head>', f'  {stylesheet}\n</head>')
+          if script not in html:
+              html = html.replace('</body>', f'  {script}\n</body>')
+          page.write_text(html, encoding='utf-8')
+          PY
           touch _site/.nojekyll
 
       - name: Configure GitHub Pages
