@@ -38,6 +38,14 @@ jobs:
           html = page.read_text(encoding='utf-8')
           stylesheet = '<link rel="stylesheet" href="animations.css">'
           script = '<script src="animations.js" defer></script>'
+          old_footer = '<div>Web • Automação • Dados • Portfólio visual com identidade própria</div>'
+          new_footer = '<div class="footer-copy"><span>Web • Automação • Dados • Portfólio visual com identidade própria</span><small>Todos os direitos reservados à VIRAL TECHH STUDIO.</small></div>'
+          if old_footer in html:
+              html = html.replace(old_footer, new_footer, 1)
+          elif 'Todos os direitos reservados à VIRAL TECHH STUDIO.' not in html:
+              footer_close = '</div>\n  </footer>'
+              if footer_close in html:
+                  html = html.replace(footer_close, '<div class="footer-copy"><small>Todos os direitos reservados à VIRAL TECHH STUDIO.</small></div>\n    </div>\n  </footer>', 1)
           if stylesheet not in html:
               html = html.replace('</head>', f'  {stylesheet}\n</head>')
           if script not in html:
